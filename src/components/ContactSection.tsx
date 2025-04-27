@@ -85,9 +85,9 @@ const ContactSection = () => {
     <section id="contact" className="section-padding bg-gray-50">
       <div className="container mx-auto px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="gradient-text mb-4">Contact Me</h2>
+          <h2 className="gradient-text mb-4">Contact Us</h2>
           <p className="text-lg text-muted-foreground">
-            Ready to transform your business with AI and robotics? Contact me to leverage my expertise
+            Ready to transform your business with AI and robotics? Contact us to leverage our expertise
             and discuss how we can address your unique challenges and opportunities.
           </p>
         </div>
@@ -188,24 +188,31 @@ const ContactSection = () => {
           </div>
           
           <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white p-6 rounded-lg shadow-sm flex items-center">
-                <Mail className="h-10 w-10 text-tech-green mr-4" />
-                <div>
-                  <h4 className="font-semibold">Email me at</h4>
-                  <a href="mailto:bahadir@beeai.world" className="text-tech-blue-light hover:underline">
-                    bahadir@beeai.world
-                  </a>
-                </div>
-              </div>
+            <div className="bg-white p-8 rounded-lg shadow-md">
+              <h3 className="text-2xl font-semibold mb-4">Let's Connect</h3>
+              <p className="text-muted-foreground mb-6">
+                Have questions or want to explore opportunities? We're here to help!
+              </p>
               
-              <div className="bg-white p-6 rounded-lg shadow-sm flex items-center">
-                <Phone className="h-10 w-10 text-tech-green mr-4" />
-                <div>
-                  <h4 className="font-semibold">Call me at</h4>
-                  <a href="tel:+905075135234" className="text-tech-blue-light hover:underline">
-                    +90 507 513 5234
-                  </a>
+              <div className="space-y-4">
+                <div className="flex items-center">
+                  <Mail className="h-6 w-6 text-tech-green mr-3 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Reach us by Email:</p>
+                    <a href="mailto:bahadir@beeai.world" className="text-tech-blue-light hover:underline">
+                      bahadir@beeai.world
+                    </a>
+                  </div>
+                </div>
+                
+                <div className="flex items-center">
+                  <Phone className="h-6 w-6 text-tech-green mr-3 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium">Call us at:</p>
+                    <a href="tel:+905075135234" className="text-tech-blue-light hover:underline">
+                      +90 507 513 5234
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

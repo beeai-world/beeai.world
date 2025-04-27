@@ -7,18 +7,18 @@ const AboutSection = () => {
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="gradient-text mb-6">My Story</h2>
+            <h2 className="gradient-text mb-6">Our Story</h2>
             <p className="text-lg mb-6">
-              With a background in AI research, data science, and robotics engineering, I founded Bee AI World with a clear vision: to bridge the gap between cutting-edge technology and real-world business needs.
+              With a background in AI research, data science, and robotics engineering, we founded Bee AI World with a clear vision: to bridge the gap between cutting-edge technology and real-world business needs.
             </p>
             <p className="text-lg mb-6">
-              From the very beginning, my mission has been simple — to make advanced AI and robotics accessible, practical, and valuable for businesses across industries. I believe in technology that doesn't just impress, but delivers measurable, meaningful results.
+              From the very beginning, our mission has been simple — to make advanced AI and robotics accessible, practical, and valuable for businesses across industries. We believe in technology that doesn't just impress, but delivers measurable, meaningful results.
             </p>
           </div>
           
           <div className="rounded-lg overflow-hidden shadow-lg bg-white">
             <div className="h-64 bg-gradient-to-r from-tech-blue to-tech-teal flex items-center justify-center">
-              <h3 className="text-3xl font-bold text-white">My Approach</h3>
+              <h3 className="text-3xl font-bold text-white">Our Approach</h3>
             </div>
             <div className="p-8">
               <div className="space-y-6">
@@ -29,7 +29,7 @@ const AboutSection = () => {
                   <div className="ml-4">
                     <h4 className="text-lg font-semibold">Business-First Methodology</h4>
                     <p className="text-muted-foreground">
-                      I start with understanding your business challenges, not pushing technology solutions. I focus is on delivering measurable business value.
+                      We start with understanding your business challenges, not pushing technology solutions. Our focus is on delivering measurable business value.
                     </p>
                   </div>
                 </div>
@@ -41,7 +41,7 @@ const AboutSection = () => {
                   <div className="ml-4">
                     <h4 className="text-lg font-semibold">Cross-Disciplinary Expertise</h4>
                     <p className="text-muted-foreground">
-                      Expertise in AI, machine learning, robotics, computer vision, and domain-specific knowledge delivering solutions tailored to your business's unique requirements.
+                      With expertise in AI, machine learning, robotics, computer vision, and domain-specific knowledge, we deliver solutions tailored to your business's unique requirements.
                     </p>
                   </div>
                 </div>
@@ -53,7 +53,7 @@ const AboutSection = () => {
                   <div className="ml-4">
                     <h4 className="text-lg font-semibold">Innovation with Purpose</h4>
                     <p className="text-muted-foreground">
-                      I pursue innovation not for its own sake, but to solve real-world problems and deliver tangible value to my clients.
+                      We pursue innovation not for its own sake, but to solve real-world problems and deliver tangible value to our clients.
                     </p>
                   </div>
                 </div>
@@ -65,7 +65,7 @@ const AboutSection = () => {
                   <div className="ml-4">
                     <h4 className="text-lg font-semibold">Industry-Specific Methodology</h4>
                     <p className="text-muted-foreground">
-                      I've developed specialized approaches tailored to the businesses I serve, addressing their unique challenges, regulations, and opportunities.
+                      We've developed specialized approaches tailored to the businesses we serve, addressing their unique challenges, regulations, and opportunities.
                     </p>
                   </div>
                 </div>

@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   const handleExploreClick = () => {
     const servicesSection = document.getElementById('services');
     if (servicesSection) {
@@ -9,7 +12,7 @@ const Hero = () => {
   };
 
   const handleRoiClick = () => {
-    window.open('https://calendly.com/bahadirciloglu/account-manager-b2b-seller', '_blank');
+    navigate('/roi-calculator');
   };
 
   return (
@@ -36,7 +39,7 @@ const Hero = () => {
               </span>
             </h1>
             <p className="mt-6 text-xl leading-8 animate-fade-up opacity-0 [animation-delay:600ms] text-white">
-              I use AI and robotics to optimize your hospitality business operations, maximize productivity, and enhance every guest interaction.
+              We use AI and robotics to optimize your hospitality business operations, maximize productivity, and enhance every guest interaction.
             </p>
             <div className="mt-10 flex flex-col md:flex-row gap-4 justify-center animate-fade-up opacity-0 [animation-delay:900ms]">
               <Button 

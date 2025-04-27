@@ -8,7 +8,7 @@ const ComplianceSection = () => {
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="gradient-text mb-4">Compliance & Security</h2>
           <p className="text-lg text-muted-foreground">
-            My "Compliance by Design" philosophy ensures that every solution I deliver meets
+            Our "Compliance by Design" philosophy ensures that every solution we deliver meets
             regulatory requirements and industry standards from day one.
           </p>
         </div>
@@ -20,7 +20,7 @@ const ComplianceSection = () => {
               <h3 className="text-xl font-semibold ml-3">AI Governance</h3>
             </div>
             <p className="text-muted-foreground">
-              My AI solutions are built to be transparent, explainable, and fair. We adhere to
+              Our AI solutions are built to be transparent, explainable, and fair. We adhere to
               emerging standards for responsible AI development and deployment.
             </p>
           </div>
@@ -42,7 +42,7 @@ const ComplianceSection = () => {
               <h3 className="text-xl font-semibold ml-3">Data Protection</h3>
             </div>
             <p className="text-muted-foreground">
-              I implement robust data security measures and comply with GDPR, CCPA, HIPAA,
+              We implement robust data security measures and comply with GDPR, CCPA, HIPAA,
               and other relevant data protection regulations.
             </p>
           </div>

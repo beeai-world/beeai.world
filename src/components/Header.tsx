@@ -23,11 +23,8 @@ const Header = () => {
   }, []);
 
   const handleConsultationClick = () => {
-    const servicesSection = document.getElementById('services');
-    if (servicesSection) {
-      servicesSection.scrollIntoView({ behavior: 'smooth' });
-      setMobileMenuOpen(false);
-    }
+    window.location.href = "/blog";
+    setMobileMenuOpen(false);
   };
 
   const handleLogoClick = (e: React.MouseEvent) => {
@@ -57,13 +54,20 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center space-x-6">
+            <a
+              href="#"
+              onClick={handleConsultationClick}
+              className="text-gray-700 hover:text-tech-blue transition-colors"
+            >
+              
+            </a>
             <a
               href="#"
               onClick={handleRoiClick}
               className="bg-tech-blue text-white px-6 py-2 rounded-full hover:bg-tech-blue/90 transition-colors cursor-pointer"
             >
-              Schedule Demo
+              Book a Free Demo
             </a>
           </div>
 
@@ -87,10 +91,17 @@ const Header = () => {
           <div className="md:hidden bg-white shadow-lg rounded-lg mt-4 py-4">
             <a
               href="#"
+              onClick={handleConsultationClick}
+              className="block px-4 py-2 text-gray-700 hover:text-tech-blue transition-colors"
+            >
+              
+            </a>
+            <a
+              href="#"
               onClick={handleRoiClick}
               className="block px-4 py-2 mt-2 bg-tech-blue text-white hover:bg-tech-blue/90 transition-colors"
             >
-              Schedule Demo
+              Book a Free Demo
             </a>
           </div>
         )}
