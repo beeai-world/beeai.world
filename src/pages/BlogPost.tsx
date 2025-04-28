@@ -153,10 +153,10 @@ const BlogPost = () => {
             &larr; Back to Blog
           </Button>
           
-          <article className="max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
+          <article className="max-w-3xl mx-auto">
+            <h1 className="text-4xl font-bold mb-4 text-tech-blue">{post.title}</h1>
             
-            <div className="relative h-80 mb-8 bg-gray-200 rounded-md overflow-hidden">
+            <div className="relative h-80 md:h-96 mb-10 bg-gray-200 rounded-lg overflow-hidden shadow-md">
               <img 
                 src={post.image} 
                 alt={post.title} 
@@ -164,31 +164,35 @@ const BlogPost = () => {
               />
             </div>
             
-            <div className="prose prose-lg max-w-none">
+            <div className="prose prose-lg max-w-none prose-headings:text-tech-blue prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h2:mt-8 prose-p:text-gray-700 prose-a:text-tech-teal prose-a:no-underline hover:prose-a:underline prose-strong:text-tech-blue-light prose-strong:font-semibold prose-blockquote:border-l-4 prose-blockquote:border-tech-green prose-blockquote:bg-gray-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:italic prose-blockquote:text-gray-700 prose-li:marker:text-tech-green prose-li:mb-1">
               <ReactMarkdown>{post.content}</ReactMarkdown>
             </div>
 
             {/* Email Capture Form */}
             {post.id === 1 && (
-              <div className="mt-8 p-6 bg-gray-100 rounded-lg">
-                <div className="space-y-4">
-                  <Input 
-                    type="email" 
-                    placeholder="Your Email Address" 
-                    className={`w-full ${showEmailAlert ? 'border-red-500 focus:ring-red-500' : ''}`}
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      if (e.target.value) setShowEmailAlert(false);
-                    }}
-                  />
+              <div className="mt-12 p-8 bg-gray-50 rounded-lg shadow-sm border border-gray-100">
+                <div className="space-y-5">
+                  <h3 className="text-xl font-semibold text-tech-blue">Don't face these challenges alone.</h3>
+                  <p className="text-gray-700">Enter your email to receive our free guide: "5 Immediate Ways AI Can Reduce Your Hospitality Labor Costs"</p>
                   
-                  {/* Alert message between email input and buttons */}
-                  <div className={`bg-amber-50 border ${showEmailAlert ? 'border-red-500 bg-red-50 text-red-800' : 'border-amber-200 text-amber-800'} p-3 rounded-md text-center text-sm`}>
-                    {showEmailAlert ? 'Please enter a valid email address to continue' : 'Please enter your email address to access these resources'}
+                  <div className="max-w-md mx-auto">
+                    <Input 
+                      type="email" 
+                      placeholder="Your Email Address" 
+                      className={`w-full ${showEmailAlert ? 'border-red-500 focus:ring-red-500' : ''}`}
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (e.target.value) setShowEmailAlert(false);
+                      }}
+                    />
+                    
+                    <p className={`text-xs mt-1 italic ${showEmailAlert ? 'text-red-500 font-medium' : 'text-gray-500'}`}>
+                      Please enter your email address to receive a free demo and ROI calculator services.
+                    </p>
                   </div>
                   
-                  <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                     <Button 
                       className="bg-tech-green hover:bg-tech-green/90 text-white w-full"
                       onClick={() => handleActionButtonClick('/contact')}
@@ -197,13 +201,13 @@ const BlogPost = () => {
                     </Button>
                     <Button 
                       variant="outline" 
-                      className="w-full"
+                      className="w-full border-tech-blue-light text-tech-blue-light hover:bg-tech-blue-light/10"
                       onClick={() => handleActionButtonClick('/roi-calculator')}
                     >
                       Try ROI Calculator
                     </Button>
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground text-center max-w-md mx-auto">
                     By providing your email, you agree to receive occasional updates about hospitality technology solutions. 
                     We respect your privacy and will never share your information.
                   </p>
@@ -211,7 +215,7 @@ const BlogPost = () => {
               </div>
             )}
 
-            <div className="mt-12 flex justify-between items-center">
+            <div className="mt-12 flex justify-between items-center border-t pt-6">
               <Button onClick={() => navigate("/blog")} variant="outline">
                 Back to Blog
               </Button>
