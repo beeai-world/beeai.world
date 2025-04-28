@@ -35,7 +35,7 @@ const Header = () => {
 
   const handleRoiClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    window.open('https://calendly.com/bahadirciloglu/account-manager-b2b-seller', '_blank');
+    window.open('https://calendly.com/bahadir-beeai/30min', '_blank');
     setMobileMenuOpen(false);
   };
 

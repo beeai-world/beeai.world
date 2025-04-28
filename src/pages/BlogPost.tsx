@@ -19,15 +19,34 @@ const blogPosts = [
     category: "AI & Robotics",
     image: "/images/blog/1.jpg"
   },
-  // Placeholders for Posts 4 to 19 (IDs 2-3 were removed)
   {
-    id: 4,
-    title: "Placeholder Blog Post 4",
-    excerpt: "This is placeholder content for blog post 4.",
+    id: 2,
+    title: "The Future of Hospitality: AI & Robots Transforming Guest Experience",
+    excerpt: "Learn how AI and robots are creating seamless, personalized experiences for hotel guests while reducing operational costs and improving staff efficiency.",
     content: "Loading content...",
     author: "Bahadır Çiloğlu",
-    date: "December 16, 2024",
-    category: "Placeholder",
+    date: "May 12, 2024",
+    category: "AI & Robotics",
+    image: "/images/blog/2.jpg"
+  },
+  {
+    id: 3,
+    title: "5 Powerful Ways Robotics Can Save Your Hotel Money",
+    excerpt: "Discover how robotics is transforming hotel operations, cutting costs, and enhancing guest experience through automated cleaning, service robots, and more.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "May 20, 2024",
+    category: "Robotics",
+    image: "/images/blog/3.jpg"
+  },
+  {
+    id: 4,
+    title: "How to Implement Service Robots in Your Hotel in 6 Steps",
+    excerpt: "A practical guide to successfully integrating service robots into your hotel operations to boost guest satisfaction, reduce costs, and create unique experiences.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "June 5, 2024",
+    category: "Implementation",
     image: "/images/blog/4.jpg"
   },
   {
@@ -39,6 +58,16 @@ const blogPosts = [
     date: "December 15, 2024",
     category: "Placeholder",
     image: "/images/blog/5.jpg"
+  },
+  {
+    id: 7,
+    title: "The Future-Proof Solution for Hospitality's Greatest Challenges",
+    excerpt: "Learn how AI and service robots can address the hospitality industry's biggest challenges: labor shortages, rising costs, and increasing guest expectations.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "July 10, 2024",
+    category: "Strategic Planning",
+    image: "/images/blog/7.jpg"
   },
   // ... Add placeholder entries for all other blog posts
 ];
@@ -73,7 +102,14 @@ const BlogPost = () => {
         const response = await fetch(`/src/components/Blogpost/${postId}.md`);
         
         if (!response.ok) {
-          throw new Error(`Failed to fetch blog post content: ${response.status}`);
+          console.error(`Failed to fetch blog post content: ${response.status}`);
+          // Even if fetch fails, we'll still show the post with placeholder content
+          setPost({
+            ...placeholderPost,
+            content: "# " + placeholderPost.title + "\n\n" + placeholderPost.excerpt
+          });
+          setLoading(false);
+          return;
         }
         
         const content = await response.text();
@@ -106,8 +142,30 @@ const BlogPost = () => {
     // Here you would typically save the email to your database
     console.log('Email submitted:', email);
     
-    // Navigate to the destination
-    navigate(destination);
+    // If destination is contact, open Calendly
+    if (destination === '/contact') {
+      window.open('https://calendly.com/bahadir-beeai/30min', '_blank');
+    } else {
+      // Navigate to other destinations
+      navigate(destination);
+    }
+  };
+
+  // Add share handlers
+  const handleTwitterShare = () => {
+    if (!post) return;
+    
+    const text = `${post.title}`;
+    const url = window.location.href;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    
+    window.open(twitterUrl, '_blank');
+  };
+
+  const handleInstagramShare = () => {
+    // Instagram doesn't have a direct sharing API for web
+    // Opening Instagram and letting users share manually is the best alternative
+    window.open('https://www.instagram.com/', '_blank');
   };
 
   if (loading) {
@@ -169,12 +227,9 @@ const BlogPost = () => {
             </div>
 
             {/* Email Capture Form */}
-            {post.id === 1 && (
+            {(post.id === 1 || post.id === 2 || post.id === 3 || post.id === 4 || post.id === 7) && (
               <div className="mt-12 p-8 bg-gray-50 rounded-lg shadow-sm border border-gray-100">
                 <div className="space-y-5">
-                  <h3 className="text-xl font-semibold text-tech-blue">Don't face these challenges alone.</h3>
-                  <p className="text-gray-700">Enter your email to receive our free guide: "5 Immediate Ways AI Can Reduce Your Hospitality Labor Costs"</p>
-                  
                   <div className="max-w-md mx-auto">
                     <Input 
                       type="email" 
@@ -207,10 +262,6 @@ const BlogPost = () => {
                       Try ROI Calculator
                     </Button>
                   </div>
-                  <p className="text-xs text-muted-foreground text-center max-w-md mx-auto">
-                    By providing your email, you agree to receive occasional updates about hospitality technology solutions. 
-                    We respect your privacy and will never share your information.
-                  </p>
                 </div>
               </div>
             )}
@@ -221,14 +272,11 @@ const BlogPost = () => {
               </Button>
               <div className="flex items-center gap-2">
                 <span className="text-sm">Share:</span>
-                <Button variant="ghost" size="sm" className="p-2">
+                <Button variant="ghost" size="sm" className="p-2" onClick={handleTwitterShare}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-twitter"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
                 </Button>
-                <Button variant="ghost" size="sm" className="p-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
-                </Button>
-                <Button variant="ghost" size="sm" className="p-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                <Button variant="ghost" size="sm" className="p-2" onClick={handleInstagramShare}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                 </Button>
               </div>
             </div>
