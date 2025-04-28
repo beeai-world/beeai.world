@@ -10,7 +10,8 @@ import {
   Bot,
   Wrench,
   Building,
-  RotateCw
+  RotateCw,
+  Headphones
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
@@ -37,26 +38,6 @@ const services = [
     ]
   },
   {
-    title: "Service and Cleaning Robot Implementation",
-    description: "We deploy service robots (concierge, delivery, reception) and cleaning robots (vacuum, scrubbers) tailored to your facility's unique needs, maximizing operational efficiency.",
-    icon: <Bot className="h-10 w-10 text-tech-green" />,
-    features: [
-      "Service Robots Deployment",
-      "Cleaning Robots Integration",
-      "Operational Efficiency"
-    ]
-  },
-  {
-    title: "Technical Support for Robot Manufacturers",
-    description: "We provide manufacturers and distributors with facility integration services, technical support systems, and project management expertise to help their robots succeed in real-world hospitality environments.",
-    icon: <Wrench className="h-10 w-10 text-tech-green" />,
-    features: [
-      "Facility Integration",
-      "Technical Support Systems",
-      "Deployment Coordination"
-    ]
-  },
-  {
     title: "Project Management for Robotic Deployments",
     description: "Deploying robotic solutions requires strategic oversight. Our project management services cover the full lifecycle — from initial assessment to deployment and ongoing support — ensuring every project is delivered on time, within budget, and to the highest standards.",
     icon: <Building className="h-10 w-10 text-tech-green" />,
@@ -64,6 +45,26 @@ const services = [
       "Project Planning & Oversight",
       "Timeline & Budget Management",
       "Quality Assurance"
+    ]
+  },
+  {
+    title: "Support for Robot Manufacturers",
+    description: "We bridge the gap between robot manufacturers and hospitality facilities, providing comprehensive implementation services, localization support, and technical expertise to ensure successful robot deployments in real-world environments.",
+    icon: <Wrench className="h-10 w-10 text-tech-green" />,
+    features: [
+      "Facility Integration & Implementation",
+      "Technical Support & Troubleshooting",
+      "Deployment Strategy & Training"
+    ]
+  },
+  {
+    title: "Technical Support for Robot Distributors",
+    description: "We provide specialized support for robot distributors, helping them effectively sell and deploy robotics solutions in hospitality settings with technical expertise and market knowledge.",
+    icon: <Headphones className="h-10 w-10 text-tech-green" />,
+    features: [
+      "Product Integration Guidance",
+      "Technical Documentation Support",
+      "Client Deployment Assistance"
     ]
   },
   {

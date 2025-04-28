@@ -32,7 +32,12 @@ const ContactSection = () => {
     setIsSubmitting(true);
 
     try {
-      console.log('Submitting form data:', formData);
+      console.log('Submitting form data to Supabase:', formData);
+      
+      // Verify all required fields are present
+      if (!formData.name || !formData.email || !formData.interest || !formData.message) {
+        throw new Error('Please fill out all required fields');
+      }
       
       // Save form data to Supabase
       const { data, error } = await supabase
@@ -41,21 +46,25 @@ const ContactSection = () => {
           {
             name: formData.name,
             email: formData.email,
-            company: formData.company,
+            company: formData.company || null, // Handle empty company field
             interest: formData.interest,
             message: formData.message,
             submitted_at: new Date().toISOString()
           }
-        ])
-        .select();
+        ]);
 
       if (error) {
-        console.error('Supabase error:', error);
+        console.error('Supabase error details:', {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint
+        });
         throw error;
       }
 
-      console.log('Form submission successful:', data);
-
+      console.log('Form submission successful');
+      
       toast({
         title: "Message sent!",
         description: "Thank you for your message. We'll get back to you soon.",
@@ -70,7 +79,12 @@ const ContactSection = () => {
         message: ""
       });
     } catch (error) {
-      console.error('Detailed error:', error);
+      console.error('Form submission error:', error);
+      // Check if it's a Supabase error with more details
+      if (error && typeof error === 'object' && 'code' in error) {
+        console.error('Database error code:', (error as any).code);
+      }
+      
       toast({
         title: "Error sending message",
         description: "Please try again later or contact us directly.",
@@ -199,8 +213,8 @@ const ContactSection = () => {
                   <Mail className="h-6 w-6 text-tech-green mr-3 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Reach us by Email:</p>
-                    <a href="mailto:bahadir@beeai.world" className="text-tech-blue-light hover:underline">
-                      bahadir@beeai.world
+                    <a href="mailto:ciloglu@beeai.world" className="text-tech-blue-light hover:underline">
+                      ciloglu@beeai.world
                     </a>
                   </div>
                 </div>
