@@ -5,6 +5,9 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { supabase } from "@/lib/supabase";
+import { useToast } from "@/components/ui/use-toast";
 
 // This will be our initial placeholder for blog posts
 // We'll replace this with actual content from Markdown files
@@ -51,13 +54,23 @@ const blogPosts = [
   },
   {
     id: 5,
-    title: "Placeholder Blog Post 5",
+    title: "Traditional vs. Modern Hospitality: The AI & Robotics Revolution",
     excerpt: "This is placeholder content for blog post 5.",
     content: "Loading content...",
     author: "Bahadır Çiloğlu",
     date: "December 15, 2024",
     category: "Placeholder",
     image: "/images/blog/5.jpg"
+  },
+  {
+    id: 6,
+    title: "Navigating the ROI of Robotics in Hospitality: A Financial Guide",
+    excerpt: "A comprehensive breakdown of the financial benefits, cost considerations, and ROI timeline when investing in service robots for your hospitality business.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "July 3, 2024",
+    category: "Financial Planning",
+    image: "/images/blog/6.jpg"
   },
   {
     id: 7,
@@ -69,6 +82,116 @@ const blogPosts = [
     category: "Strategic Planning",
     image: "/images/blog/7.jpg"
   },
+  {
+    id: 8,
+    title: "How Robots Are Revolutionizing Hotel Housekeeping",
+    excerpt: "Discover how cleaning robots are transforming hotel housekeeping operations, reducing costs by up to 40% while improving guest satisfaction and staff efficiency.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "July 24, 2024",
+    category: "Robotics & Housekeeping",
+    image: "/images/blog/8.jpg"
+  },
+  {
+    id: 9,
+    title: "How AI Is Reshaping Guest Service in Luxury Hotels",
+    excerpt: "Explore how AI is helping luxury hotels deliver deeply personalized experiences that anticipate guest needs, creating a new standard in high-end hospitality.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "August 5, 2024",
+    category: "Luxury Hospitality",
+    image: "/images/blog/9.jpg"
+  },
+  {
+    id: 10,
+    title: "How AI Is Transforming Hotel Operations in the Face of Labor Shortages",
+    excerpt: "Learn how hotels are using AI to strategically augment teams and create intelligent systems where technology handles repetitive tasks while staff focus on high-value interactions.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "August 18, 2024",
+    category: "Operations",
+    image: "/images/blog/10.jpg"
+  },
+  {
+    id: 11,
+    title: "Service Robots in Action: Real-World Integration Success Stories",
+    excerpt: "Explore real-world case studies of successful service robot integrations in hospitality, including implementation strategies and measurable results.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "September 2, 2024",
+    category: "Case Studies",
+    image: "/images/blog/11.jpg"
+  },
+  {
+    id: 12,
+    title: "Voice AI: The Invisible Revolution in Hotel Guest Experience",
+    excerpt: "Discover how voice AI technology is quietly transforming the hotel experience with natural, frictionless interactions that enhance service while solving operational challenges.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "September 15, 2024",
+    category: "Voice Technology",
+    image: "/images/blog/12.jpg"
+  },
+  {
+    id: 13,
+    title: "AI-Powered Predictive Maintenance: Preventing Hotel Disasters Before They Happen",
+    excerpt: "Learn how AI is revolutionizing hotel maintenance by predicting equipment failures before they occur, saving properties millions in emergency repairs and guest compensation.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "October 3, 2024",
+    category: "Maintenance & Operations",
+    image: "/images/blog/13.jpg"
+  },
+  {
+    id: 14,
+    title: "Revolutionizing Room Turnover: How AI and Robotics Are Solving Hospitality's Biggest Operational Challenge",
+    excerpt: "Discover how AI coordination systems and task-specific robotics are transforming the room turnover process, reducing cleaning time by 33% while improving staff satisfaction.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "October 17, 2024",
+    category: "Operations & Efficiency",
+    image: "/images/blog/14.jpg"
+  },
+  {
+    id: 15,
+    title: "The New Luxury: How AI Delivers Hyper-Personalized Guest Experiences",
+    excerpt: "Learn how AI is redefining luxury hospitality through predictive personalization that anticipates guest needs and creates truly unique experiences at scale.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "November 5, 2024",
+    category: "Luxury & Personalization",
+    image: "/images/blog/15.jpg"
+  },
+  {
+    id: 16,
+    title: "The ROI of Innovation: Calculating the Real Returns of AI and Robotics in Hospitality",
+    excerpt: "Beyond the hype: A framework for calculating the tangible returns of AI and robotics in hospitality settings, based on real-world implementations.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "November 18, 2024",
+    category: "ROI & Finance",
+    image: "/images/blog/16.jpg"
+  },
+  {
+    id: 17,
+    title: "Beyond the Breakdown: Reimagining Hospitality Technology Maintenance",
+    excerpt: "Discover how advanced troubleshooting systems not only minimize disruptions but transform maintenance into a strategic advantage for hospitality businesses.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "December 1, 2024",
+    category: "Maintenance & Technology",
+    image: "/images/blog/17.jpg"
+  },
+  {
+    id: 18,
+    title: "Unlocking Hidden Value: How AI Analytics Are Transforming Hospitality Business Intelligence",
+    excerpt: "Learn how AI analytics platforms enable forward-thinking hospitality businesses to extract unprecedented insights from existing data sources, revealing hidden opportunities.",
+    content: "Loading content...",
+    author: "Bahadır Çiloğlu",
+    date: "December 15, 2024",
+    category: "Analytics & Business Intelligence",
+    image: "/images/blog/18.jpg"
+  }
   // ... Add placeholder entries for all other blog posts
 ];
 
@@ -80,6 +203,7 @@ const BlogPost = () => {
   const [error, setError] = useState(false);
   const [email, setEmail] = useState("");
   const [showEmailAlert, setShowEmailAlert] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchBlogPost = async () => {
@@ -132,22 +256,61 @@ const BlogPost = () => {
   }, [id]);
 
   // Update this function to handle button clicks without using toast
-  const handleActionButtonClick = (destination: string) => {
+  const handleActionButtonClick = async (destination: string) => {
     if (!email || !email.includes('@') || !email.includes('.')) {
       // Instead of showing a toast, set state to show our inline alert more prominently
       setShowEmailAlert(true);
       return;
     }
     
-    // Here you would typically save the email to your database
-    console.log('Email submitted:', email);
-    
-    // If destination is contact, open Calendly
-    if (destination === '/contact') {
-      window.open('https://calendly.com/bahadir-beeai/30min', '_blank');
-    } else {
-      // Navigate to other destinations
-      navigate(destination);
+    try {
+      // Save to Supabase
+      const { data, error } = await supabase
+        .from('email_subscriptions')
+        .insert([
+          {
+            email: email,
+            source: `blog_post_${post.id}`,
+            interest: destination === '/contact' ? 'demo' : 'roi_calculator'
+          }
+        ]);
+      
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      // Here you would typically save the email to your database
+      console.log('Email submitted:', email);
+      
+      // Reset the email field
+      setEmail("");
+      
+      // If destination is contact, open Calendly
+      if (destination === '/contact') {
+        window.open('https://calendly.com/bahadir-beeai/30min', '_blank');
+      } else {
+        // Navigate to other destinations
+        navigate(destination);
+      }
+    } catch (error) {
+      console.error('Error saving email:', error);
+      
+      // Check if it's a duplicate email error (unique constraint violation)
+      if (error && typeof error === 'object' && 'code' in error && (error as any).code === '23505') {
+        // Still open Calendly or navigate
+        if (destination === '/contact') {
+          window.open('https://calendly.com/bahadir-beeai/30min', '_blank');
+        } else {
+          navigate(destination);
+        }
+      } else {
+        toast({
+          title: "Error",
+          description: "There was a problem processing your request. Please try again.",
+          variant: "destructive"
+        });
+      }
     }
   };
 
@@ -222,15 +385,18 @@ const BlogPost = () => {
               />
             </div>
             
-            <div className="prose prose-lg max-w-none prose-headings:text-tech-blue prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h2:mt-8 prose-p:text-gray-700 prose-a:text-tech-teal prose-a:no-underline hover:prose-a:underline prose-strong:text-tech-blue-light prose-strong:font-semibold prose-blockquote:border-l-4 prose-blockquote:border-tech-green prose-blockquote:bg-gray-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:italic prose-blockquote:text-gray-700 prose-li:marker:text-tech-green prose-li:mb-1">
-              <ReactMarkdown>{post.content}</ReactMarkdown>
+            <div className="prose prose-lg max-w-none prose-headings:text-tech-blue prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h2:mt-8 prose-p:text-gray-700 prose-a:text-tech-teal prose-a:no-underline hover:prose-a:underline prose-strong:text-tech-blue-light prose-strong:font-semibold prose-blockquote:border-l-4 prose-blockquote:border-tech-green prose-blockquote:bg-gray-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:italic prose-blockquote:text-gray-700 prose-li:marker:text-tech-green prose-li:mb-1 prose-table:border-collapse prose-table:w-full prose-td:border prose-td:p-2 prose-th:border prose-th:p-2 prose-th:bg-gray-100">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
             </div>
 
             {/* Email Capture Form */}
-            {(post.id === 1 || post.id === 2 || post.id === 3 || post.id === 4 || post.id === 7) && (
+            {(post.id === 1 || post.id === 2 || post.id === 3 || post.id === 4 || post.id === 5 || post.id === 6 || post.id === 7 || post.id === 8 || post.id === 9 || post.id === 10 || post.id === 11 || post.id === 12 || post.id === 13 || post.id === 14 || post.id === 15 || post.id === 16 || post.id === 17 || post.id === 18) && (
               <div className="mt-12 p-8 bg-gray-50 rounded-lg shadow-sm border border-gray-100">
                 <div className="space-y-5">
                   <div className="max-w-md mx-auto">
+                    <h3 className="text-xl font-bold text-center mb-3">
+                      Want to Learn More?
+                    </h3>
                     <Input 
                       type="email" 
                       placeholder="Your Email Address" 
