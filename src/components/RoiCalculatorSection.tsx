@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/lib/supabase";
 
 const RoiCalculatorSection = () => {
   const { toast } = useToast();
@@ -186,19 +187,182 @@ const RoiCalculatorSection = () => {
     }, 1000);
   };
 
-  const handleRequestReport = (e: React.FormEvent) => {
+  const handleRequestReport = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API submission
-    setTimeout(() => {
+    try {
+      // Prepare calculation details based on selected solution
+      let calculationDetails = {};
+      
+      if (solution === "chatbot") {
+        calculationDetails = {
+          monthlySalary,
+          employeeCount,
+          systemCost,
+          totalMonthlyCost,
+          annualLaborCost,
+          chatbotPaybackPeriod
+        };
+      } else if (solution === "voice-assistant") {
+        calculationDetails = {
+          receptionistSalary,
+          receptionistCount,
+          voiceSystemCost,
+          voiceMaintenanceCost,
+          voiceMonthlySavings,
+          voiceAnnualSavings,
+          voiceTotalCost,
+          voiceRoi,
+          voicePaybackPeriod
+        };
+      } else if (solution === "virtual-concierge") {
+        calculationDetails = {
+          conciergeEmployeeSalary,
+          conciergeEmployeeCount,
+          conciergeSystemCost,
+          conciergeMaintenanceCost,
+          conciergeMonthlySavings,
+          conciergeAnnualSavings,
+          conciergeTotalCost,
+          conciergeRoi,
+          conciergePaybackPeriod
+        };
+      } else if (solution === "ai-usage-training") {
+        calculationDetails = {
+          trainedEmployees,
+          timeSavedPerDay,
+          hourlyWage,
+          trainingCostPerEmployee,
+          monthlyTimeSaved,
+          monthlyValueSaved,
+          annualValueSaved,
+          trainingTotalCost,
+          trainingRoi,
+          trainingPaybackPeriod
+        };
+      } else if (solution === "system-integration-training") {
+        calculationDetails = {
+          traineesCount,
+          costPerTraining,
+          monthlySupportCost,
+          supportCostReduction,
+          integrationMonthlySavings,
+          integrationAnnualSavings,
+          integrationTotalCost,
+          integrationRoi,
+          integrationPaybackPeriod
+        };
+      } else if (solution === "certification-programs") {
+        calculationDetails = {
+          participantsCount,
+          costPerCertificate,
+          avgProjectCost,
+          projectEfficiency,
+          projectsPerYear,
+          certificationAnnualGain,
+          certificationTotalCost,
+          certificationRoi,
+          certificationPaybackPeriod
+        };
+      } else if (solution === "service-robot") {
+        calculationDetails = {
+          laborCostReplaced,
+          robotCount,
+          robotCost,
+          robotMaintenance,
+          robotMonthlySavings,
+          robotAnnualSavings,
+          robotTotalCost,
+          robotRoi,
+          robotPaybackPeriod
+        };
+      } else if (solution === "cleaning-robot") {
+        calculationDetails = {
+          cleaningLaborCost,
+          cleaningRobotCount,
+          cleaningRobotCost,
+          cleaningRobotMaintenance,
+          cleaningMonthlySavings,
+          cleaningAnnualSavings,
+          cleaningTotalCost,
+          cleaningRoi,
+          cleaningPaybackPeriod
+        };
+      } else if (solution === "safety-inspection") {
+        calculationDetails = {
+          inspectionCost,
+          riskReduction,
+          inspectionSystemCost,
+          aiSubscription,
+          inspectionMonthlySavings,
+          inspectionAnnualSavings,
+          inspectionTotalCost,
+          inspectionRoi,
+          inspectionPaybackPeriod
+        };
+      } else if (solution === "inventory-monitoring") {
+        calculationDetails = {
+          inventoryLaborCost,
+          inventoryZones,
+          inventorySystemCost,
+          inventoryMaintenance,
+          inventoryMonthlySavings,
+          inventoryAnnualSavings,
+          inventoryTotalCost,
+          inventoryRoi,
+          inventoryPaybackPeriod
+        };
+      } else if (solution === "facility-checks") {
+        calculationDetails = {
+          auditCost,
+          auditedZones,
+          facilitySystemCost,
+          aiProcessingCost,
+          facilityMonthlySavings,
+          facilityAnnualSavings,
+          facilityTotalCost,
+          facilityRoi,
+          facilityPaybackPeriod
+        };
+      } else if (solution === "indoor-mapping") {
+        calculationDetails = {
+          mappingCost,
+          mappingUpdates,
+          setupCost,
+          mappingSoftwareCost,
+          mappingAnnualSavings,
+          mappingTotalCost,
+          mappingRoi,
+          mappingPaybackPeriod
+        };
+      }
+      
+      // Save to Supabase using the new function
+      const { data, error } = await supabase.rpc('handle_roi_calculator_submission', {
+        p_email: email,
+        p_phone: phone || null,
+        p_solution: solution,
+        p_calculation_details: calculationDetails
+      });
+
+      if (error) throw error;
+
       setIsSubmitting(false);
       setFormSubmitted(true);
       toast({
         title: "Report request submitted!",
         description: "We will send your personalized business analysis report shortly.",
       });
-    }, 1500);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Error submitting request",
+        description: "Please try again or contact us directly.",
+        variant: "destructive"
+      });
+      setIsSubmitting(false);
+    }
   };
 
   const resetCalculator = () => {
