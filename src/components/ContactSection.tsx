@@ -213,8 +213,8 @@ const ContactSection = () => {
                   <Mail className="h-6 w-6 text-tech-green mr-3 flex-shrink-0" />
                   <div>
                     <p className="font-medium">Reach us by Email:</p>
-                    <a href="mailto:ciloglu@beeai.world" className="text-tech-blue-light hover:underline">
-                      ciloglu@beeai.world
+                    <a href="mailto:bahadir@beeai.world" className="text-tech-blue-light hover:underline">
+                      bahadir@beeai.world
                     </a>
                   </div>
                 </div>
