@@ -8,6 +8,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/components/ui/use-toast";
+import { Helmet } from "react-helmet";
 
 // This will be our initial placeholder for blog posts
 // We'll replace this with actual content from Markdown files
@@ -366,7 +367,27 @@ const BlogPost = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
+      {post && (
+        <Helmet>
+          <title>{post.title} | AI & Robotics Studio</title>
+          <meta name="description" content={post.excerpt} />
+          
+          {/* OpenGraph Meta Tags */}
+          <meta property="og:title" content={post.title} />
+          <meta property="og:description" content={post.excerpt} />
+          <meta property="og:type" content="article" />
+          <meta property="og:image" content={`https://www.beeai.world${post.image}`} />
+          
+          {/* Twitter Card Meta Tags */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:site" content="@BeeAI" />
+          <meta name="twitter:title" content={post.title} />
+          <meta name="twitter:description" content={post.excerpt} />
+          <meta name="twitter:image" content={`https://www.beeai.world${post.image}`} />
+        </Helmet>
+      )}
+      
       <Header />
       <div className="section-padding bg-white">
         <div className="container mx-auto px-6">
