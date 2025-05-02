@@ -347,19 +347,20 @@ const BlogPost = () => {
     if (!post) return;
     
     const title = `${post.title} | AI & Robotics Agency`;
-    const description = post.excerpt;
     const url = window.location.href;
     
-    // Fix for Twitter card issues - manually force a debug request to Twitter
+    // Twitter'ın meta etiketi önbelleğini atlatmak için doğrudan blog post ID'sine göre paylaşım
     if (post.id === 4) {
-      // If this is post #4, force refresh Twitter's cache by using twitterid parameter
-      const twitterDebugUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}&twitterid=${new Date().getTime()}`;
+      // 4 numaralı blog post için özel paylaşım - Twitter'ın önbelleğini atlat
+      const timestamp = new Date().getTime();
+      // Twitter'ın resim önbelleğini atlatmak için URL'e timestamp ekle
+      // Twitter önbelleği güncellemek için özel paylaşım URL'i
+      const twitterDebugUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(`${url}?t=${timestamp}`)}`;
       window.open(twitterDebugUrl, '_blank');
     } else {
-      // For other posts, use standard Twitter share
-      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
-      const refreshedUrl = `${twitterUrl}&t=${new Date().getTime()}`;
-      window.open(refreshedUrl, '_blank');
+      // Diğer postlar için standart Twitter paylaşımı
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(`${url}?t=${new Date().getTime()}`)}`;
+      window.open(twitterUrl, '_blank');
     }
   };
 
@@ -413,7 +414,11 @@ const BlogPost = () => {
         
         {/* Image handling based on post ID - special handling for post #4 */}
         {post.id === 4 ? (
-          <meta property="og:image" content="https://www.beeai.world/images/blog/4.jpg" />
+          <>
+            <meta property="og:image" content={`https://www.beeai.world/images/blog/4.jpg?t=${new Date().getTime()}`} />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
+          </>
         ) : (
           <meta property="og:image" content={post.image && post.image.startsWith('http') 
             ? post.image 
@@ -429,7 +434,10 @@ const BlogPost = () => {
         
         {/* Image handling based on post ID - special handling for post #4 */}
         {post.id === 4 ? (
-          <meta name="twitter:image" content="https://www.beeai.world/images/blog/4.jpg" />
+          <>
+            <meta name="twitter:image" content={`https://www.beeai.world/images/blog/4.jpg?t=${new Date().getTime()}`} />
+            <meta name="twitter:image:alt" content="Service robot in a hotel setting" />
+          </>
         ) : (
           <meta name="twitter:image" content={post.image && post.image.startsWith('http') 
             ? post.image 
