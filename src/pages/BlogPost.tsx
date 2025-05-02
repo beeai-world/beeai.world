@@ -346,20 +346,28 @@ const BlogPost = () => {
   const handleTwitterShare = () => {
     if (!post) return;
     
-    const title = `${post.title} | AI & Robotics Agency`;
+    // 4 numaralı blog için özel dikkat çekici paylaşım metni
+    let tweetText = '';
+    if (post.id === 4) {
+      // Daha dikkat çekici ve interaktif paylaşım metni
+      tweetText = `🤖 Transform Your Hotel with Service Robots! 6 Easy Steps to Revolutionize Guest Experience\n\n📊 Cut costs by 30%\n⏱️ Save 15+ staff hours/week\n⭐ Boost guest ratings\n\n${post.title} | AI & Robotics Agency`;
+    } else {
+      // Diğer postlar için standart paylaşım metni
+      tweetText = `${post.title} | AI & Robotics Agency`;
+    }
+    
     const url = window.location.href;
     
     // Twitter'ın meta etiketi önbelleğini atlatmak için doğrudan blog post ID'sine göre paylaşım
     if (post.id === 4) {
       // 4 numaralı blog post için özel paylaşım - Twitter'ın önbelleğini atlat
       const timestamp = new Date().getTime();
-      // Twitter'ın resim önbelleğini atlatmak için URL'e timestamp ekle
-      // Twitter önbelleği güncellemek için özel paylaşım URL'i
-      const twitterDebugUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(`${url}?t=${timestamp}`)}`;
-      window.open(twitterDebugUrl, '_blank');
+      // URL'e timestamp ekleme
+      const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${url}?t=${timestamp}`)}`;
+      window.open(twitterShareUrl, '_blank');
     } else {
       // Diğer postlar için standart Twitter paylaşımı
-      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(`${url}?t=${new Date().getTime()}`)}`;
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${url}?t=${new Date().getTime()}`)}`;
       window.open(twitterUrl, '_blank');
     }
   };
@@ -415,9 +423,10 @@ const BlogPost = () => {
         {/* Image handling based on post ID - special handling for post #4 */}
         {post.id === 4 ? (
           <>
-            <meta property="og:image" content={`https://www.beeai.world/images/blog/4.jpg?t=${new Date().getTime()}`} />
+            <meta property="og:image" content="https://www.beeai.world/images/blog/4.jpg" />
             <meta property="og:image:width" content="1200" />
             <meta property="og:image:height" content="630" />
+            <meta property="og:image:alt" content="Modern service robot in a luxury hotel restaurant setting" />
           </>
         ) : (
           <meta property="og:image" content={post.image && post.image.startsWith('http') 
@@ -429,14 +438,16 @@ const BlogPost = () => {
         
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@BeeAI" />
+        <meta name="twitter:creator" content="@BahadirCiloglu" />
         <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta name="twitter:description" content={post.excerpt} />
         
         {/* Image handling based on post ID - special handling for post #4 */}
         {post.id === 4 ? (
           <>
-            <meta name="twitter:image" content={`https://www.beeai.world/images/blog/4.jpg?t=${new Date().getTime()}`} />
-            <meta name="twitter:image:alt" content="Service robot in a hotel setting" />
+            <meta name="twitter:image" content="https://www.beeai.world/images/blog/4.jpg" />
+            <meta name="twitter:image:alt" content="Modern service robot in a luxury hotel restaurant setting" />
           </>
         ) : (
           <meta name="twitter:image" content={post.image && post.image.startsWith('http') 
