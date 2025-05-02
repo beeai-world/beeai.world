@@ -430,17 +430,15 @@ const BlogPost = () => {
     }
     
     const url = window.location.href;
+    const baseUrl = url.split('?')[0]; // Remove any existing query parameters
     
     // Create Twitter share URL with timestamp for cache busting
     const timestamp = new Date().getTime();
     
-    // Blog 5 için farklı yapı - resim daha açık şekilde belirtiliyor
-    if (post.id === 5) {
-      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${url}?img=blog/5.jpg&t=${timestamp}`)}`, '_blank');
-    } else {
-      const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${url}?t=${timestamp}`)}`;
-      window.open(twitterShareUrl, '_blank');
-    }
+    // For all blog posts, use the image parameter to explicitly tell Twitter about the image
+    const imageUrl = encodeURIComponent(`https://beeai.world/images/blog/${post.id}.jpg`);
+    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${baseUrl}?img=${imageUrl}&t=${timestamp}`)}`;
+    window.open(twitterShareUrl, '_blank');
   };
 
   const handleInstagramShare = () => {
@@ -486,52 +484,33 @@ const BlogPost = () => {
         <meta name="description" content={post.excerpt} />
         
         {/* OpenGraph tags for Facebook, LinkedIn */}
-        <meta property="og:url" content={window.location.href} />
+        <meta property="og:url" content={window.location.href.split('?')[0]} />
         <meta property="og:type" content="article" />
         <meta property="og:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta property="og:description" content={post.excerpt} />
         
-        {/* Image handling - with special handling for post 5 */}
-        {post.id === 5 ? (
-          <>
-            <meta property="og:image" content="https://www.beeai.world/images/blog/5.jpg" />
-            <meta property="og:image:width" content="1200" />
-            <meta property="og:image:height" content="630" />
-            <meta property="og:image:alt" content="AI & Robotics transforming traditional to modern hospitality" />
-          </>
-        ) : (
-          <meta property="og:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
-        )}
+        {/* Image handling with absolute URLs, ensuring full domain */}
+        <meta property="og:image" content={`https://beeai.world/images/blog/${post.id}.jpg`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={post.title} />
         
         <meta property="og:site_name" content="AI & Robotics Agency" />
         
-        {/* Twitter Card tags - with special handling for post 5 */}
+        {/* Twitter Card tags with explicit card type and absolute URLs */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@BeeAI" />
         <meta name="twitter:creator" content="@BahadirCiloglu" />
         <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta name="twitter:description" content={post.excerpt} />
-        
-        {post.id === 5 ? (
-          <>
-            <meta name="twitter:image" content="https://www.beeai.world/images/blog/5.jpg" />
-            <meta name="twitter:image:alt" content="AI & Robotics transforming traditional to modern hospitality" />
-          </>
-        ) : (
-          <>
-            <meta name="twitter:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
-            <meta name="twitter:image:alt" content={post.title} />
-          </>
-        )}
+        <meta name="twitter:image" content={`https://beeai.world/images/blog/${post.id}.jpg`} />
+        <meta name="twitter:image:alt" content={post.title} />
         
         {/* Force cache refresh with timestamp */}
         <meta name="timestamp" content={new Date().toISOString()} />
         
         {/* Canonical URL */}
-        <link rel="canonical" href={window.location.href} />
+        <link rel="canonical" href={window.location.href.split('?')[0]} />
       </Helmet>
       <div className="flex-col min-h-screen bg-background">
         <Header />
