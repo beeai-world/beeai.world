@@ -8,7 +8,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/components/ui/use-toast";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
+import { FaTwitter, FaInstagram } from "react-icons/fa";
 
 // This will be our initial placeholder for blog posts
 // We'll replace this with actual content from Markdown files
@@ -374,17 +375,19 @@ const BlogPost = () => {
           <meta name="description" content={post.excerpt} />
           
           {/* OpenGraph Meta Tags */}
-          <meta property="og:title" content={post.title} />
+          <meta property="og:title" content={`${post.title} | AI & Robotics Agency`} />
           <meta property="og:description" content={post.excerpt} />
           <meta property="og:type" content="article" />
           <meta property="og:image" content={`https://www.beeai.world${post.image}`} />
+          <meta property="og:url" content={`https://www.beeai.world/blog/${post.id}`} />
           
           {/* Twitter Card Meta Tags */}
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:site" content="@BeeAI" />
-          <meta name="twitter:title" content={post.title} />
+          <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
           <meta name="twitter:description" content={post.excerpt} />
           <meta name="twitter:image" content={`https://www.beeai.world${post.image}`} />
+          <meta name="twitter:url" content={`https://www.beeai.world/blog/${post.id}`} />
         </Helmet>
       )}
       
@@ -460,10 +463,10 @@ const BlogPost = () => {
               <div className="flex items-center gap-2">
                 <span className="text-sm">Share:</span>
                 <Button variant="ghost" size="sm" className="p-2" onClick={handleTwitterShare}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-twitter"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+                  <FaTwitter />
                 </Button>
                 <Button variant="ghost" size="sm" className="p-2" onClick={handleInstagramShare}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                  <FaInstagram />
                 </Button>
               </div>
             </div>
