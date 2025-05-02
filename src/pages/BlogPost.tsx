@@ -350,14 +350,17 @@ const BlogPost = () => {
     const description = post.excerpt;
     const url = window.location.href;
     
-    // Twitter doesn't use the image URL parameter - it pulls from meta tags
-    // So we just need text and URL for the tweet
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
-    
-    // Force cache refresh by adding timestamp
-    const refreshedUrl = `${twitterUrl}&t=${new Date().getTime()}`;
-    
-    window.open(refreshedUrl, '_blank');
+    // Fix for Twitter card issues - manually force a debug request to Twitter
+    if (post.id === 4) {
+      // If this is post #4, force refresh Twitter's cache by using twitterid parameter
+      const twitterDebugUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}&twitterid=${new Date().getTime()}`;
+      window.open(twitterDebugUrl, '_blank');
+    } else {
+      // For other posts, use standard Twitter share
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+      const refreshedUrl = `${twitterUrl}&t=${new Date().getTime()}`;
+      window.open(refreshedUrl, '_blank');
+    }
   };
 
   const handleInstagramShare = () => {
@@ -400,39 +403,38 @@ const BlogPost = () => {
     <>
       <Helmet>
         <title>{post.title} | AI & Robotics Agency</title>
-        <meta name="description" content={post.id === 4 ? 
-          "Transform your hotel with service robots in 6 practical steps. Cut costs, boost guest satisfaction, and gain competitive advantage. Learn our proven implementation method." : 
-          post.excerpt} />
+        <meta name="description" content={post.excerpt} />
         
         {/* OpenGraph tags for Facebook, LinkedIn */}
         <meta property="og:url" content={window.location.href} />
         <meta property="og:type" content="article" />
         <meta property="og:title" content={`${post.title} | AI & Robotics Agency`} />
-        <meta property="og:description" content={post.id === 4 ? 
-          "Transform your hotel with service robots in 6 practical steps. Cut costs, boost guest satisfaction, and gain competitive advantage. Learn our proven implementation method." : 
-          post.excerpt} />
-        <meta property="og:image" content={
-          post.id === 4 ? 
-            "https://www.beeai.world/images/blog/4.jpg" : 
-            (post.image && post.image.startsWith('http') 
-              ? post.image 
-              : `https://www.beeai.world${post.image || '/images/og-image.png'}`)
-        } />
+        <meta property="og:description" content={post.excerpt} />
+        
+        {/* Image handling based on post ID - special handling for post #4 */}
+        {post.id === 4 ? (
+          <meta property="og:image" content="https://www.beeai.world/images/blog/4.jpg" />
+        ) : (
+          <meta property="og:image" content={post.image && post.image.startsWith('http') 
+            ? post.image 
+            : `https://www.beeai.world${post.image || '/images/og-image.png'}`} />
+        )}
+        
         <meta property="og:site_name" content="AI & Robotics Agency" />
         
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
-        <meta name="twitter:description" content={post.id === 4 ? 
-          "Transform your hotel with service robots in 6 practical steps. Cut costs, boost guest satisfaction, and gain competitive advantage. Learn our proven implementation method." : 
-          post.excerpt} />
-        <meta name="twitter:image" content={
-          post.id === 4 ? 
-            "https://www.beeai.world/images/blog/4.jpg" : 
-            (post.image && post.image.startsWith('http') 
-              ? post.image 
-              : `https://www.beeai.world${post.image || '/images/og-image.png'}`)
-        } />
+        <meta name="twitter:description" content={post.excerpt} />
+        
+        {/* Image handling based on post ID - special handling for post #4 */}
+        {post.id === 4 ? (
+          <meta name="twitter:image" content="https://www.beeai.world/images/blog/4.jpg" />
+        ) : (
+          <meta name="twitter:image" content={post.image && post.image.startsWith('http') 
+            ? post.image 
+            : `https://www.beeai.world${post.image || '/images/og-image.png'}`} />
+        )}
         
         {/* Force cache refresh with timestamp */}
         <meta name="timestamp" content={new Date().toISOString()} />
