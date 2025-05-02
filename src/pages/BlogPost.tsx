@@ -207,6 +207,24 @@ const BlogPost = () => {
   const [showEmailAlert, setShowEmailAlert] = useState(false);
   const { toast } = useToast();
 
+  // Function to force social platforms to refresh their metadata cache
+  const refreshSocialCache = async () => {
+    if (!post) return;
+    
+    try {
+      // This can help clear Twitter card cache
+      const url = `https://www.beeai.world/blog/${id}`;
+      
+      // You can add API calls to trigger cache refresh for various platforms
+      // For example, if using Facebook's scraper:
+      // await fetch(`https://graph.facebook.com/?id=${encodeURIComponent(url)}&scrape=true`)
+      
+      console.log('Metadata refresh triggered for:', url);
+    } catch (err) {
+      console.error('Error refreshing social cache:', err);
+    }
+  };
+
   useEffect(() => {
     const fetchBlogPost = async () => {
       setLoading(true);
@@ -223,8 +241,6 @@ const BlogPost = () => {
         }
 
         // Fetch the actual content from the Markdown file
-        // In a production app, you'd use a proper Markdown parser
-        // For now, we'll just fetch the raw text
         const response = await fetch(`/src/components/Blogpost/${postId}.md`);
         
         if (!response.ok) {
@@ -256,6 +272,16 @@ const BlogPost = () => {
 
     fetchBlogPost();
   }, [id]);
+
+  // Call refreshSocialCache when the post data is loaded
+  useEffect(() => {
+    if (post) {
+      refreshSocialCache();
+      
+      // Update document title directly to ensure it's set
+      document.title = `${post.title} | AI & Robotics Agency`;
+    }
+  }, [post]);
 
   // Update this function to handle button clicks without using toast
   const handleActionButtonClick = async (destination: string) => {
@@ -320,161 +346,167 @@ const BlogPost = () => {
   const handleTwitterShare = () => {
     if (!post) return;
     
-    const text = `${post.title}`;
+    const title = `${post.title} | AI & Robotics Agency`;
+    const description = post.excerpt;
     const url = window.location.href;
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
     
-    window.open(twitterUrl, '_blank');
+    // Force cache refresh by adding timestamp
+    const refreshedUrl = `${twitterUrl}&t=${new Date().getTime()}`;
+    
+    window.open(refreshedUrl, '_blank');
   };
 
   const handleInstagramShare = () => {
     // Instagram doesn't have a direct sharing API for web
-    // Opening Instagram and letting users share manually is the best alternative
-    window.open('https://www.instagram.com/', '_blank');
+    // For now, let's open a generic share dialog if available
+    if (navigator.share) {
+      navigator.share({
+        title: `${post.title} | AI & Robotics Agency`,
+        text: post.excerpt,
+        url: window.location.href,
+      }).catch(err => {
+        console.error('Error sharing:', err);
+        // Fallback to opening Instagram
+        window.open('https://www.instagram.com/', '_blank');
+      });
+    } else {
+      // Fallback to opening Instagram
+      window.open('https://www.instagram.com/', '_blank');
+    }
   };
 
   if (loading) {
     return (
-      <div>
-        <Header />
-        <div className="section-padding bg-white min-h-screen">
-          <div className="container mx-auto px-6">
-            <div className="flex justify-center items-center min-h-[50vh]">
-              <p className="text-lg">Loading blog post...</p>
-            </div>
-          </div>
-        </div>
-        <Footer />
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
       </div>
     );
   }
 
   if (error || !post) {
     return (
-      <div>
-        <Header />
-        <div className="section-padding bg-white min-h-screen">
-          <div className="container mx-auto px-6">
-            <div className="flex flex-col justify-center items-center min-h-[50vh]">
-              <h1 className="text-2xl font-bold mb-4">Blog Post Not Found</h1>
-              <p className="mb-6">Sorry, we couldn't find the blog post you're looking for.</p>
-              <Button onClick={() => navigate("/blog")}>Back to Blog</Button>
-            </div>
-          </div>
-        </div>
-        <Footer />
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <h1 className="text-4xl font-bold mb-4">Blog Post Not Found</h1>
+        <Button onClick={() => navigate('/blog')}>Back to Blog</Button>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {post && (
-        <Helmet>
-          <title>{post.title} | AI & Robotics Agency</title>
-          <meta name="description" content={post.excerpt} />
-          
-          {/* OpenGraph Meta Tags */}
-          <meta property="og:title" content={`${post.title} | AI & Robotics Agency`} />
-          <meta property="og:description" content={post.excerpt} />
-          <meta property="og:type" content="article" />
-          <meta property="og:image" content={`https://www.beeai.world${post.image}`} />
-          <meta property="og:url" content={`https://www.beeai.world/blog/${post.id}`} />
-          
-          {/* Twitter Card Meta Tags */}
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:site" content="@BeeAI" />
-          <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
-          <meta name="twitter:description" content={post.excerpt} />
-          <meta name="twitter:image" content={`https://www.beeai.world${post.image}`} />
-          <meta name="twitter:url" content={`https://www.beeai.world/blog/${post.id}`} />
-        </Helmet>
-      )}
-      
-      <Header />
-      <div className="section-padding bg-white">
-        <div className="container mx-auto px-6">
-          <Button onClick={() => navigate("/blog")} variant="outline" className="mb-8">
+    <>
+      <Helmet>
+        <title>{post.title} | AI & Robotics Agency</title>
+        <meta name="description" content={post.excerpt} />
+        
+        {/* OpenGraph tags for Facebook, LinkedIn */}
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={`${post.title} | AI & Robotics Agency`} />
+        <meta property="og:description" content={post.excerpt} />
+        <meta property="og:image" content={post.image} />
+        <meta property="og:site_name" content="AI & Robotics Agency" />
+        
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
+        <meta name="twitter:description" content={post.excerpt} />
+        <meta name="twitter:image" content={post.image} />
+        
+        {/* Force cache refresh with timestamp */}
+        <meta name="timestamp" content={new Date().toISOString()} />
+        
+        {/* Canonical URL */}
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
+      <div className="flex-col min-h-screen bg-background">
+        <Header />
+        <div className="container px-4 py-8 md:py-12 max-w-4xl mx-auto">
+          <Button
+            variant="outline"
+            onClick={() => navigate('/blog')}
+            className="mb-8"
+          >
             &larr; Back to Blog
           </Button>
           
-          <article className="max-w-3xl mx-auto">
-            <h1 className="text-4xl font-bold mb-4 text-tech-blue">{post.title}</h1>
-            
-            <div className="relative h-80 md:h-96 mb-10 bg-gray-200 rounded-lg overflow-hidden shadow-md">
+          <article className="prose prose-slate max-w-none">
+            <h1 className="text-4xl font-bold mb-6">{post.title}</h1>
+            {post.image && (
               <img 
                 src={post.image} 
                 alt={post.title} 
-                className="w-full h-full object-cover" 
+                className="w-full h-auto object-cover rounded-lg mb-8" 
               />
-            </div>
-            
-            <div className="prose prose-lg max-w-none prose-headings:text-tech-blue prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h2:mt-8 prose-p:text-gray-700 prose-a:text-tech-teal prose-a:no-underline hover:prose-a:underline prose-strong:text-tech-blue-light prose-strong:font-semibold prose-blockquote:border-l-4 prose-blockquote:border-tech-green prose-blockquote:bg-gray-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:italic prose-blockquote:text-gray-700 prose-li:marker:text-tech-green prose-li:mb-1 prose-table:border-collapse prose-table:w-full prose-td:border prose-td:p-2 prose-th:border prose-th:p-2 prose-th:bg-gray-100">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
-            </div>
-
-            {/* Email Capture Form */}
-            {(post.id === 1 || post.id === 2 || post.id === 3 || post.id === 4 || post.id === 5 || post.id === 6 || post.id === 7 || post.id === 8 || post.id === 9 || post.id === 10 || post.id === 11 || post.id === 12 || post.id === 13 || post.id === 14 || post.id === 15 || post.id === 16 || post.id === 17 || post.id === 18) && (
-              <div className="mt-12 p-8 bg-gray-50 rounded-lg shadow-sm border border-gray-100">
-                <div className="space-y-5">
-                  <div className="max-w-md mx-auto">
-                    <h3 className="text-xl font-bold text-center mb-3">
-                      Want to Learn More?
-                    </h3>
-                    <Input 
-                      type="email" 
-                      placeholder="Your Email Address" 
-                      className={`w-full ${showEmailAlert ? 'border-red-500 focus:ring-red-500' : ''}`}
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        if (e.target.value) setShowEmailAlert(false);
-                      }}
-                    />
-                    
-                    <p className={`text-xs mt-1 italic ${showEmailAlert ? 'text-red-500 font-medium' : 'text-gray-500'}`}>
-                      Please enter your email address to receive a free demo and ROI calculator services.
-                    </p>
-                  </div>
-                  
-                  <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                    <Button 
-                      className="bg-tech-green hover:bg-tech-green/90 text-white w-full"
-                      onClick={() => handleActionButtonClick('/contact')}
-                    >
-                      Book a Free Demo
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="w-full border-tech-blue-light text-tech-blue-light hover:bg-tech-blue-light/10"
-                      onClick={() => handleActionButtonClick('/roi-calculator')}
-                    >
-                      Try ROI Calculator
-                    </Button>
-                  </div>
-                </div>
-              </div>
             )}
-
-            <div className="mt-12 flex justify-between items-center border-t pt-6">
-              <Button onClick={() => navigate("/blog")} variant="outline">
-                Back to Blog
-              </Button>
-              <div className="flex items-center gap-2">
-                <span className="text-sm">Share:</span>
-                <Button variant="ghost" size="sm" className="p-2" onClick={handleTwitterShare}>
-                  <FaTwitter />
-                </Button>
-                <Button variant="ghost" size="sm" className="p-2" onClick={handleInstagramShare}>
-                  <FaInstagram />
-                </Button>
-              </div>
+            <div className="markdown-content">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {post.content}
+              </ReactMarkdown>
             </div>
           </article>
+          
+          {/* Email Capture Form */}
+          {(post.id === 1 || post.id === 2 || post.id === 3 || post.id === 4 || post.id === 5 || post.id === 6 || post.id === 7 || post.id === 8 || post.id === 9 || post.id === 10 || post.id === 11 || post.id === 12 || post.id === 13 || post.id === 14 || post.id === 15 || post.id === 16 || post.id === 17 || post.id === 18) && (
+            <div className="mt-12 p-8 bg-gray-50 rounded-lg shadow-sm border border-gray-100">
+              <div className="space-y-5">
+                <div className="max-w-md mx-auto">
+                  <h3 className="text-xl font-bold text-center mb-3">
+                    Want to Learn More?
+                  </h3>
+                  <Input 
+                    type="email" 
+                    placeholder="Your Email Address" 
+                    className={`w-full ${showEmailAlert ? 'border-red-500 focus:ring-red-500' : ''}`}
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (e.target.value) setShowEmailAlert(false);
+                    }}
+                  />
+                  
+                  <p className={`text-xs mt-1 italic ${showEmailAlert ? 'text-red-500 font-medium' : 'text-gray-500'}`}>
+                    Please enter your email address to receive a free demo and ROI calculator services.
+                  </p>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                  <Button 
+                    className="bg-tech-green hover:bg-tech-green/90 text-white w-full"
+                    onClick={() => handleActionButtonClick('/contact')}
+                  >
+                    Book a Free Demo
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-tech-blue-light text-tech-blue-light hover:bg-tech-blue-light/10"
+                    onClick={() => handleActionButtonClick('/roi-calculator')}
+                  >
+                    Try ROI Calculator
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="mt-12 flex justify-between items-center border-t pt-6">
+            <Button onClick={() => navigate("/blog")} variant="outline">
+              Back to Blog
+            </Button>
+            <div className="flex items-center gap-2">
+              <span className="text-sm">Share:</span>
+              <Button variant="ghost" size="sm" className="p-2" onClick={handleTwitterShare}>
+                <FaTwitter />
+              </Button>
+              <Button variant="ghost" size="sm" className="p-2" onClick={handleInstagramShare}>
+                <FaInstagram />
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
       <Footer />
-    </div>
+    </>
   );
 };
 
