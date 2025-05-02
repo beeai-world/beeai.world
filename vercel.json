@@ -5,15 +5,5 @@
   "framework": "vite",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
-  ],
-  "routes": [
-    {
-      "src": "/[^.]+",
-      "dest": "/index.html",
-      "status": 200
-    },
-    {
-      "handle": "filesystem"
-    }
   ]
 } 
