@@ -432,12 +432,9 @@ const BlogPost = () => {
     const url = window.location.href;
     const baseUrl = url.split('?')[0]; // Remove any existing query parameters
 
-    // Add a random parameter to force Twitter to refresh its card cache
-    const timestamp = new Date().getTime();
-    const randomParam = Math.floor(Math.random() * 1000000);
-    
-    // Force Twitter to use the direct image URL by including it as card_img
-    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${baseUrl}?cache=${timestamp}_${randomParam}`)}`;
+    // Use a direct Twitter share URL without any extra parameters
+    // Twitter will read the meta tags from the page when the URL is shared
+    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(baseUrl)}`;
     
     window.open(twitterShareUrl, '_blank');
   };
@@ -491,31 +488,19 @@ const BlogPost = () => {
         <meta property="og:description" content={post.excerpt} />
         
         {/* Image handling with absolute URLs, ensuring full domain */}
-        <meta property="og:image" content={`https://beeai.world/images/blog/${post.id}.jpg`} />
+        <meta property="og:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={post.title} />
         
         <meta property="og:site_name" content="AI & Robotics Agency" />
         
-        {/* Twitter Card tags with explicit card type and absolute URLs */}
+        {/* Twitter Card tags - Using only essential tags with high quality image */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@BeeAI" />
-        <meta name="twitter:creator" content="@BahadirCiloglu" />
         <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta name="twitter:description" content={post.excerpt} />
-        
-        {/* Explicit full URL to image - using https and www */}
         <meta name="twitter:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
-        <meta name="twitter:image:alt" content={post.title} />
-        
-        {/* Extra Twitter image tags to force visibility */}
-        <meta name="twitter:image:src" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
-        <meta name="twitter:image:width" content="1200" />
-        <meta name="twitter:image:height" content="630" />
-        
-        {/* Force cache refresh with timestamp */}
-        <meta name="timestamp" content={new Date().toISOString()} />
         
         {/* Canonical URL */}
         <link rel="canonical" href={window.location.href.split('?')[0]} />
