@@ -400,25 +400,39 @@ const BlogPost = () => {
     <>
       <Helmet>
         <title>{post.title} | AI & Robotics Agency</title>
-        <meta name="description" content={post.excerpt} />
+        <meta name="description" content={post.id === 4 ? 
+          "Transform your hotel with service robots in 6 practical steps. Cut costs, boost guest satisfaction, and gain competitive advantage. Learn our proven implementation method." : 
+          post.excerpt} />
         
         {/* OpenGraph tags for Facebook, LinkedIn */}
         <meta property="og:url" content={window.location.href} />
         <meta property="og:type" content="article" />
         <meta property="og:title" content={`${post.title} | AI & Robotics Agency`} />
-        <meta property="og:description" content={post.excerpt} />
-        <meta property="og:image" content={post.image && post.image.startsWith('http') 
-          ? post.image 
-          : `https://www.beeai.world${post.image || '/images/og-image.png'}`} />
+        <meta property="og:description" content={post.id === 4 ? 
+          "Transform your hotel with service robots in 6 practical steps. Cut costs, boost guest satisfaction, and gain competitive advantage. Learn our proven implementation method." : 
+          post.excerpt} />
+        <meta property="og:image" content={
+          post.id === 4 ? 
+            "https://www.beeai.world/images/blog/4.jpg" : 
+            (post.image && post.image.startsWith('http') 
+              ? post.image 
+              : `https://www.beeai.world${post.image || '/images/og-image.png'}`)
+        } />
         <meta property="og:site_name" content="AI & Robotics Agency" />
         
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
-        <meta name="twitter:description" content={post.excerpt} />
-        <meta name="twitter:image" content={post.image && post.image.startsWith('http') 
-          ? post.image 
-          : `https://www.beeai.world${post.image || '/images/og-image.png'}`} />
+        <meta name="twitter:description" content={post.id === 4 ? 
+          "Transform your hotel with service robots in 6 practical steps. Cut costs, boost guest satisfaction, and gain competitive advantage. Learn our proven implementation method." : 
+          post.excerpt} />
+        <meta name="twitter:image" content={
+          post.id === 4 ? 
+            "https://www.beeai.world/images/blog/4.jpg" : 
+            (post.image && post.image.startsWith('http') 
+              ? post.image 
+              : `https://www.beeai.world${post.image || '/images/og-image.png'}`)
+        } />
         
         {/* Force cache refresh with timestamp */}
         <meta name="timestamp" content={new Date().toISOString()} />
