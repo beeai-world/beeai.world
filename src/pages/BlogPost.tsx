@@ -349,12 +349,10 @@ const BlogPost = () => {
     const title = `${post.title} | AI & Robotics Agency`;
     const description = post.excerpt;
     const url = window.location.href;
-    const imageUrl = post.image && post.image.startsWith('http') 
-      ? post.image 
-      : `https://www.beeai.world${post.image || '/images/og-image.png'}`;
     
-    // Include the image explicitly in the tweet
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}&image=${encodeURIComponent(imageUrl)}`;
+    // Twitter doesn't use the image URL parameter - it pulls from meta tags
+    // So we just need text and URL for the tweet
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
     
     // Force cache refresh by adding timestamp
     const refreshedUrl = `${twitterUrl}&t=${new Date().getTime()}`;
