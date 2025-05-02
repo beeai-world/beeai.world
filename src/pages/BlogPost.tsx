@@ -240,15 +240,20 @@ const BlogPost = () => {
           return;
         }
 
-        // Fetch the actual content from the Markdown file
-        const response = await fetch(`/src/components/Blogpost/${postId}.md`);
+        // Fetch the actual content from the Markdown file - try with correct path first
+        let response = await fetch(`/src/components/Blogpost/${postId}.md`);
+        
+        // If that fails, try alternative paths
+        if (!response.ok) {
+          response = await fetch(`/components/Blogpost/${postId}.md`);
+        }
         
         if (!response.ok) {
           console.error(`Failed to fetch blog post content: ${response.status}`);
-          // Even if fetch fails, we'll still show the post with placeholder content
+          // Use the placeholder content with full excerpt for better display
           setPost({
             ...placeholderPost,
-            content: "# " + placeholderPost.title + "\n\n" + placeholderPost.excerpt
+            content: `# ${placeholderPost.title}\n\n${placeholderPost.excerpt}\n\n## Key Benefits\n\n* Improved efficiency\n* Cost reduction\n* Enhanced guest experience\n\n*Contact us to learn more about implementing AI & Robotics solutions in your business.*`
           });
           setLoading(false);
           return;
@@ -256,10 +261,10 @@ const BlogPost = () => {
         
         const content = await response.text();
         
-        // Combine the placeholder metadata with the fetched content
-        // Ensure we're not setting HTML content as the blog post content
-        const cleanContent = content.startsWith('<!DOCTYPE') ? 
-          `# ${placeholderPost.title}\n\n${placeholderPost.excerpt}\n\nPlease check back later for the full content.` : 
+        // Ensure content is valid - check for HTML and provide clean markdown if needed
+        const isHTML = content.startsWith('<!DOCTYPE') || content.startsWith('<html') || content.includes('<body>');
+        const cleanContent = isHTML ? 
+          `# ${placeholderPost.title}\n\n${placeholderPost.excerpt}\n\n## Key Benefits\n\n* Improved efficiency\n* Cost reduction\n* Enhanced guest experience\n\n*Contact us to learn more about implementing AI & Robotics solutions in your business.*` : 
           content;
           
         setPost({
@@ -270,8 +275,18 @@ const BlogPost = () => {
         setLoading(false);
       } catch (err) {
         console.error("Error fetching blog post:", err);
-        setError(true);
-        setLoading(false);
+        // Even on error, show something useful
+        const placeholderPost = blogPosts.find(p => p.id === Number(id));
+        if (placeholderPost) {
+          setPost({
+            ...placeholderPost,
+            content: `# ${placeholderPost.title}\n\n${placeholderPost.excerpt}\n\n## Coming Soon\n\nFull content for this article is being prepared. Check back soon!`
+          });
+          setLoading(false);
+        } else {
+          setError(true);
+          setLoading(false);
+        }
       }
     };
 
@@ -351,30 +366,75 @@ const BlogPost = () => {
   const handleTwitterShare = () => {
     if (!post) return;
     
-    // 4 numaralı blog için özel dikkat çekici paylaşım metni
+    // Each blog post gets its own attention-grabbing tweet format
     let tweetText = '';
-    if (post.id === 4) {
-      // Daha dikkat çekici ve interaktif paylaşım metni
-      tweetText = `🤖 Transform Your Hotel with Service Robots! 6 Easy Steps to Revolutionize Guest Experience\n\n📊 Cut costs by 30%\n⏱️ Save 15+ staff hours/week\n⭐ Boost guest ratings\n\n${post.title} | AI & Robotics Agency`;
-    } else {
-      // Diğer postlar için standart paylaşım metni
-      tweetText = `${post.title} | AI & Robotics Agency`;
+    
+    // Create custom attention-grabbing tweets based on blog post id
+    switch(post.id) {
+      case 1:
+        tweetText = `🏨 Is your hospitality business struggling with labor shortages?\n\n🤖 Discover how AI & Robotics can help you:\n✅ Overcome staffing challenges\n✅ Reduce operational costs\n✅ Improve guest experiences\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 2:
+        tweetText = `🔮 The future of hospitality is HERE!\n\n🤖 AI & Robots are creating:\n✅ Seamless guest experiences\n✅ Reduced operational costs\n✅ Improved staff efficiency\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 3:
+        tweetText = `💰 Looking to save money in your hotel operations?\n\n🤖 5 Powerful ways robotics can help:\n✅ Cut operational costs\n✅ Reduce staff burnout\n✅ Improve guest satisfaction\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 4:
+        tweetText = `🤖 Transform Your Hotel with Service Robots! 6 Easy Steps to Revolutionize Guest Experience\n\n📊 Cut costs by 30%\n⏱️ Save 15+ staff hours/week\n⭐ Boost guest ratings\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 5:
+        tweetText = `🔄 Traditional vs. Modern Hospitality\n\n🤖 The AI & Robotics Revolution is here!\n✅ Enhanced guest experiences\n✅ Operational efficiency\n✅ Competitive advantage\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 6:
+        tweetText = `💵 What's the ROI on robotics in hospitality?\n\n📊 Our guide breaks down:\n✅ Financial benefits\n✅ Cost considerations\n✅ ROI timeline\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 7:
+        tweetText = `⚠️ Facing hospitality's biggest challenges?\n\n🤖 The future-proof solution is here:\n✅ Address labor shortages\n✅ Manage rising costs\n✅ Meet guest expectations\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 8:
+        tweetText = `🧹 Hotel housekeeping revolution!\n\n🤖 Cleaning robots can:\n✅ Cut costs by 40%\n✅ Improve cleanliness consistency\n✅ Free staff for value-add tasks\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 9:
+        tweetText = `✨ Luxury hotels are being transformed by AI\n\n🤖 Creating experiences that:\n✅ Anticipate guest needs\n✅ Personalize every interaction\n✅ Set new luxury standards\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 10:
+        tweetText = `👥 Facing labor shortages in your hotel?\n\n🤖 AI can help by:\n✅ Handling repetitive tasks\n✅ Augmenting your team\n✅ Creating intelligent systems\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 11:
+        tweetText = `📊 Service Robots: Real Results, Real Hotels\n\n🤖 Success stories featuring:\n✅ Implementation strategies\n✅ ROI metrics\n✅ Staff & guest feedback\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 12:
+        tweetText = `🗣️ The invisible revolution in hotels: Voice AI\n\n🤖 Creating experiences with:\n✅ Natural interactions\n✅ Frictionless service\n✅ Operational efficiency\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 13:
+        tweetText = `⚠️ Prevent hotel disasters before they happen!\n\n🤖 AI-powered predictive maintenance:\n✅ Saves millions in repairs\n✅ Prevents guest compensation\n✅ Extends equipment life\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 14:
+        tweetText = `⏱️ Room turnover challenges?\n\n🤖 AI & Robotics solutions:\n✅ Reduce cleaning time by 33%\n✅ Improve consistency\n✅ Increase staff satisfaction\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 15:
+        tweetText = `✨ Redefining luxury in hospitality\n\n🤖 AI delivers hyper-personalization:\n✅ Predictive service\n✅ Individualized experiences\n✅ Unmatched attention to detail\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 16:
+        tweetText = `💵 Beyond the hype: Real ROI on AI & Robotics\n\n📊 Our framework shows:\n✅ Concrete returns\n✅ Adoption timeline\n✅ Success metrics\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 17:
+        tweetText = `🔧 Reimagining hospitality maintenance\n\n🤖 Advanced troubleshooting systems:\n✅ Minimize disruptions\n✅ Provide strategic advantage\n✅ Reduce operational costs\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      case 18:
+        tweetText = `📈 Unlock hidden value in your hotel data\n\n🤖 AI analytics platforms reveal:\n✅ Unprecedented insights\n✅ Revenue opportunities\n✅ Efficiency improvements\n\n${post.title} | AI & Robotics Agency`;
+        break;
+      default:
+        tweetText = `🤖 Discover the future of hospitality with AI & Robotics!\n\n${post.title} | AI & Robotics Agency`;
     }
     
     const url = window.location.href;
     
-    // Twitter'ın meta etiketi önbelleğini atlatmak için doğrudan blog post ID'sine göre paylaşım
-    if (post.id === 4) {
-      // 4 numaralı blog post için özel paylaşım - Twitter'ın önbelleğini atlat
-      const timestamp = new Date().getTime();
-      // URL'e timestamp ekleme
-      const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${url}?t=${timestamp}`)}`;
-      window.open(twitterShareUrl, '_blank');
-    } else {
-      // Diğer postlar için standart Twitter paylaşımı
-      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${url}?t=${new Date().getTime()}`)}`;
-      window.open(twitterUrl, '_blank');
-    }
+    // Create Twitter share URL with timestamp for cache busting
+    const timestamp = new Date().getTime();
+    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${url}?t=${timestamp}`)}`;
+    window.open(twitterShareUrl, '_blank');
   };
 
   const handleInstagramShare = () => {
@@ -425,40 +485,22 @@ const BlogPost = () => {
         <meta property="og:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta property="og:description" content={post.excerpt} />
         
-        {/* Image handling with fixed, absolute URLs */}
-        {post.id === 4 ? (
-          <>
-            <meta property="og:image" content="https://www.beeai.world/images/blog/4.jpg" />
-            <meta property="og:image:width" content="1200" />
-            <meta property="og:image:height" content="630" />
-            <meta property="og:image:alt" content="Modern service robot in a luxury hotel restaurant setting" />
-          </>
-        ) : (
-          <meta property="og:image" content={post.image && post.image.startsWith('http') 
-            ? post.image 
-            : `https://www.beeai.world${post.image}`} />
-        )}
+        {/* Image handling - absolute URLs for all blog posts */}
+        <meta property="og:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content={post.title} />
         
         <meta property="og:site_name" content="AI & Robotics Agency" />
         
-        {/* Twitter Card tags - ensure image URLs are absolute */}
+        {/* Twitter Card tags - absolute URLs for all */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@BeeAI" />
         <meta name="twitter:creator" content="@BahadirCiloglu" />
         <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta name="twitter:description" content={post.excerpt} />
-        
-        {/* Use absolute URLs without timestamp for Twitter Card */}
-        {post.id === 4 ? (
-          <>
-            <meta name="twitter:image" content="https://www.beeai.world/images/blog/4.jpg" />
-            <meta name="twitter:image:alt" content="Modern service robot in a luxury hotel restaurant setting" />
-          </>
-        ) : (
-          <meta name="twitter:image" content={post.image && post.image.startsWith('http') 
-            ? post.image 
-            : `https://www.beeai.world${post.image}`} />
-        )}
+        <meta name="twitter:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
+        <meta name="twitter:image:alt" content={post.title} />
         
         {/* Force cache refresh with timestamp */}
         <meta name="timestamp" content={new Date().toISOString()} />
