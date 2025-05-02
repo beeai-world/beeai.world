@@ -257,9 +257,14 @@ const BlogPost = () => {
         const content = await response.text();
         
         // Combine the placeholder metadata with the fetched content
+        // Ensure we're not setting HTML content as the blog post content
+        const cleanContent = content.startsWith('<!DOCTYPE') ? 
+          `# ${placeholderPost.title}\n\n${placeholderPost.excerpt}\n\nPlease check back later for the full content.` : 
+          content;
+          
         setPost({
           ...placeholderPost,
-          content
+          content: cleanContent
         });
         
         setLoading(false);
@@ -420,7 +425,7 @@ const BlogPost = () => {
         <meta property="og:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta property="og:description" content={post.excerpt} />
         
-        {/* Image handling based on post ID - special handling for post #4 */}
+        {/* Image handling with fixed, absolute URLs */}
         {post.id === 4 ? (
           <>
             <meta property="og:image" content="https://www.beeai.world/images/blog/4.jpg" />
@@ -431,19 +436,19 @@ const BlogPost = () => {
         ) : (
           <meta property="og:image" content={post.image && post.image.startsWith('http') 
             ? post.image 
-            : `https://www.beeai.world${post.image || '/images/og-image.png'}`} />
+            : `https://www.beeai.world${post.image}`} />
         )}
         
         <meta property="og:site_name" content="AI & Robotics Agency" />
         
-        {/* Twitter Card tags */}
+        {/* Twitter Card tags - ensure image URLs are absolute */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@BeeAI" />
         <meta name="twitter:creator" content="@BahadirCiloglu" />
         <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta name="twitter:description" content={post.excerpt} />
         
-        {/* Image handling based on post ID - special handling for post #4 */}
+        {/* Use absolute URLs without timestamp for Twitter Card */}
         {post.id === 4 ? (
           <>
             <meta name="twitter:image" content="https://www.beeai.world/images/blog/4.jpg" />
@@ -452,7 +457,7 @@ const BlogPost = () => {
         ) : (
           <meta name="twitter:image" content={post.image && post.image.startsWith('http') 
             ? post.image 
-            : `https://www.beeai.world${post.image || '/images/og-image.png'}`} />
+            : `https://www.beeai.world${post.image}`} />
         )}
         
         {/* Force cache refresh with timestamp */}
