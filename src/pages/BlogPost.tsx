@@ -431,13 +431,14 @@ const BlogPost = () => {
     
     const url = window.location.href;
     const baseUrl = url.split('?')[0]; // Remove any existing query parameters
-    
-    // Create Twitter share URL with timestamp for cache busting
+
+    // Add a random parameter to force Twitter to refresh its card cache
     const timestamp = new Date().getTime();
+    const randomParam = Math.floor(Math.random() * 1000000);
     
-    // For all blog posts, use the image parameter to explicitly tell Twitter about the image
-    const imageUrl = encodeURIComponent(`https://beeai.world/images/blog/${post.id}.jpg`);
-    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${baseUrl}?img=${imageUrl}&t=${timestamp}`)}`;
+    // Force Twitter to use the direct image URL by including it as card_img
+    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${baseUrl}?cache=${timestamp}_${randomParam}`)}`;
+    
     window.open(twitterShareUrl, '_blank');
   };
 
@@ -503,8 +504,15 @@ const BlogPost = () => {
         <meta name="twitter:creator" content="@BahadirCiloglu" />
         <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta name="twitter:description" content={post.excerpt} />
-        <meta name="twitter:image" content={`https://beeai.world/images/blog/${post.id}.jpg`} />
+        
+        {/* Explicit full URL to image - using https and www */}
+        <meta name="twitter:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
         <meta name="twitter:image:alt" content={post.title} />
+        
+        {/* Extra Twitter image tags to force visibility */}
+        <meta name="twitter:image:src" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
+        <meta name="twitter:image:width" content="1200" />
+        <meta name="twitter:image:height" content="630" />
         
         {/* Force cache refresh with timestamp */}
         <meta name="timestamp" content={new Date().toISOString()} />
