@@ -349,7 +349,12 @@ const BlogPost = () => {
     const title = `${post.title} | AI & Robotics Agency`;
     const description = post.excerpt;
     const url = window.location.href;
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+    const imageUrl = post.image && post.image.startsWith('http') 
+      ? post.image 
+      : `https://www.beeai.world${post.image || '/images/og-image.png'}`;
+    
+    // Include the image explicitly in the tweet
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}&image=${encodeURIComponent(imageUrl)}`;
     
     // Force cache refresh by adding timestamp
     const refreshedUrl = `${twitterUrl}&t=${new Date().getTime()}`;
@@ -404,14 +409,18 @@ const BlogPost = () => {
         <meta property="og:type" content="article" />
         <meta property="og:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta property="og:description" content={post.excerpt} />
-        <meta property="og:image" content={post.image} />
+        <meta property="og:image" content={post.image && post.image.startsWith('http') 
+          ? post.image 
+          : `https://www.beeai.world${post.image || '/images/og-image.png'}`} />
         <meta property="og:site_name" content="AI & Robotics Agency" />
         
         {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta name="twitter:description" content={post.excerpt} />
-        <meta name="twitter:image" content={post.image} />
+        <meta name="twitter:image" content={post.image && post.image.startsWith('http') 
+          ? post.image 
+          : `https://www.beeai.world${post.image || '/images/og-image.png'}`} />
         
         {/* Force cache refresh with timestamp */}
         <meta name="timestamp" content={new Date().toISOString()} />
