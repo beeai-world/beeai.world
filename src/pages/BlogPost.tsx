@@ -370,7 +370,7 @@ const BlogPost = () => {
     <div className="flex flex-col min-h-screen">
       {post && (
         <Helmet>
-          <title>{post.title} | AI & Robotics Studio</title>
+          <title>{post.title} | AI & Robotics Agency</title>
           <meta name="description" content={post.excerpt} />
           
           {/* OpenGraph Meta Tags */}
