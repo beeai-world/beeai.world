@@ -433,8 +433,14 @@ const BlogPost = () => {
     
     // Create Twitter share URL with timestamp for cache busting
     const timestamp = new Date().getTime();
-    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${url}?t=${timestamp}`)}`;
-    window.open(twitterShareUrl, '_blank');
+    
+    // Blog 5 için farklı yapı - resim daha açık şekilde belirtiliyor
+    if (post.id === 5) {
+      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${url}?img=blog/5.jpg&t=${timestamp}`)}`, '_blank');
+    } else {
+      const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${url}?t=${timestamp}`)}`;
+      window.open(twitterShareUrl, '_blank');
+    }
   };
 
   const handleInstagramShare = () => {
@@ -485,22 +491,41 @@ const BlogPost = () => {
         <meta property="og:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta property="og:description" content={post.excerpt} />
         
-        {/* Image handling - absolute URLs for all blog posts */}
-        <meta property="og:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
+        {/* Image handling - with special handling for post 5 */}
+        {post.id === 5 ? (
+          <>
+            <meta property="og:image" content="https://www.beeai.world/images/blog/5.jpg" />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
+            <meta property="og:image:alt" content="AI & Robotics transforming traditional to modern hospitality" />
+          </>
+        ) : (
+          <meta property="og:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
+        )}
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={post.title} />
         
         <meta property="og:site_name" content="AI & Robotics Agency" />
         
-        {/* Twitter Card tags - absolute URLs for all */}
+        {/* Twitter Card tags - with special handling for post 5 */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@BeeAI" />
         <meta name="twitter:creator" content="@BahadirCiloglu" />
         <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta name="twitter:description" content={post.excerpt} />
-        <meta name="twitter:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
-        <meta name="twitter:image:alt" content={post.title} />
+        
+        {post.id === 5 ? (
+          <>
+            <meta name="twitter:image" content="https://www.beeai.world/images/blog/5.jpg" />
+            <meta name="twitter:image:alt" content="AI & Robotics transforming traditional to modern hospitality" />
+          </>
+        ) : (
+          <>
+            <meta name="twitter:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
+            <meta name="twitter:image:alt" content={post.title} />
+          </>
+        )}
         
         {/* Force cache refresh with timestamp */}
         <meta name="timestamp" content={new Date().toISOString()} />
