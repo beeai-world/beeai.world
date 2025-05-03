@@ -429,20 +429,10 @@ const BlogPost = () => {
         tweetText = `🤖 Discover the future of hospitality with AI & Robotics!\n\n${post.title} | AI & Robotics Agency`;
     }
     
-    // For embedding image directly in the tweet - Twitter may display this more reliably
-    const imageUrl = `https://www.beeai.world/images/blog/${post.id}.jpg`;
+    const baseUrl = `https://www.beeai.world/blog/${post.id}`;
     
-    // Add direct image URL in the tweet text for Twitter to recognize it
-    tweetText += `\n\n${imageUrl}`;
-    
-    const url = window.location.href;
-    const baseUrl = url.split('?')[0]; // Remove any existing query parameters
-
-    // Add a cache busting parameter
-    const timestamp = new Date().getTime();
-
-    // Use a direct Twitter share URL with the image explicitly mentioned in the text
-    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${baseUrl}?t=${timestamp}`)}`;
+    // Create Twitter share URL with clean URL
+    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(baseUrl)}`;
     
     window.open(twitterShareUrl, '_blank');
   };
@@ -486,39 +476,31 @@ const BlogPost = () => {
   return (
     <>
       <Helmet>
-        <title>{post.title} | AI & Robotics Agency</title>
-        <meta name="description" content={post.excerpt} />
+        <title>{post?.title ? `${post.title} | AI & Robotics Agency` : 'Blog | AI & Robotics Agency'}</title>
+        <meta name="description" content={post?.excerpt || 'Discover the future of hospitality with AI & Robotics Agency'} />
         
         {/* OpenGraph tags for Facebook, LinkedIn with absolute URLs */}
-        <meta property="og:url" content={window.location.href.split('?')[0]} />
+        <meta property="og:url" content={`https://www.beeai.world/blog/${id}`} />
         <meta property="og:type" content="article" />
-        <meta property="og:title" content={`${post.title} | AI & Robotics Agency`} />
-        <meta property="og:description" content={post.excerpt} />
-        <meta property="og:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
+        <meta property="og:title" content={post?.title ? `${post.title} | AI & Robotics Agency` : 'Blog | AI & Robotics Agency'} />
+        <meta property="og:description" content={post?.excerpt || 'Discover the future of hospitality with AI & Robotics Agency'} />
+        <meta property="og:image" content={post?.image ? `https://www.beeai.world${post.image}` : 'https://www.beeai.world/images/og-image.png'} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content={post.title} />
+        <meta property="og:image:alt" content={post?.title || 'AI & Robotics Agency'} />
         <meta property="og:site_name" content="AI & Robotics Agency" />
         
-        {/* Twitter Card tags with all possible tags to ensure compatibility */}
+        {/* Twitter Card tags with essential tags for proper display */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@BeeAI" />
         <meta name="twitter:creator" content="@BahadirCiloglu" />
-        <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
-        <meta name="twitter:description" content={post.excerpt} />
-        <meta name="twitter:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
-        <meta name="twitter:image:src" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
-        <meta name="twitter:image:alt" content={post.title} />
-        <meta name="twitter:domain" content="beeai.world" />
-        
-        {/* Force immediate crawling */}
-        <meta name="robots" content="index, follow" />
-        <meta http-equiv="cache-control" content="no-cache" />
-        <meta http-equiv="expires" content="0" />
-        <meta http-equiv="pragma" content="no-cache" />
+        <meta name="twitter:title" content={post?.title ? `${post.title} | AI & Robotics Agency` : 'Blog | AI & Robotics Agency'} />
+        <meta name="twitter:description" content={post?.excerpt || 'Discover the future of hospitality with AI & Robotics Agency'} />
+        <meta name="twitter:image" content={post?.image ? `https://www.beeai.world${post.image}` : 'https://www.beeai.world/images/og-image.png'} />
+        <meta name="twitter:image:alt" content={post?.title || 'AI & Robotics Agency'} />
         
         {/* Canonical URL */}
-        <link rel="canonical" href={window.location.href.split('?')[0]} />
+        <link rel="canonical" href={`https://www.beeai.world/blog/${id}`} />
       </Helmet>
       <div className="flex-col min-h-screen bg-background">
         <Header />
