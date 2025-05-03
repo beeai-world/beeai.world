@@ -429,12 +429,20 @@ const BlogPost = () => {
         tweetText = `🤖 Discover the future of hospitality with AI & Robotics!\n\n${post.title} | AI & Robotics Agency`;
     }
     
+    // For embedding image directly in the tweet - Twitter may display this more reliably
+    const imageUrl = `https://www.beeai.world/images/blog/${post.id}.jpg`;
+    
+    // Add direct image URL in the tweet text for Twitter to recognize it
+    tweetText += `\n\n${imageUrl}`;
+    
     const url = window.location.href;
     const baseUrl = url.split('?')[0]; // Remove any existing query parameters
 
-    // Use a direct Twitter share URL without any extra parameters
-    // Twitter will read the meta tags from the page when the URL is shared
-    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(baseUrl)}`;
+    // Add a cache busting parameter
+    const timestamp = new Date().getTime();
+
+    // Use a direct Twitter share URL with the image explicitly mentioned in the text
+    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(`${baseUrl}?t=${timestamp}`)}`;
     
     window.open(twitterShareUrl, '_blank');
   };
@@ -481,26 +489,33 @@ const BlogPost = () => {
         <title>{post.title} | AI & Robotics Agency</title>
         <meta name="description" content={post.excerpt} />
         
-        {/* OpenGraph tags for Facebook, LinkedIn */}
+        {/* OpenGraph tags for Facebook, LinkedIn with absolute URLs */}
         <meta property="og:url" content={window.location.href.split('?')[0]} />
         <meta property="og:type" content="article" />
         <meta property="og:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta property="og:description" content={post.excerpt} />
-        
-        {/* Image handling with absolute URLs, ensuring full domain */}
         <meta property="og:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={post.title} />
-        
         <meta property="og:site_name" content="AI & Robotics Agency" />
         
-        {/* Twitter Card tags - Using only essential tags with high quality image */}
+        {/* Twitter Card tags with all possible tags to ensure compatibility */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@BeeAI" />
+        <meta name="twitter:creator" content="@BahadirCiloglu" />
         <meta name="twitter:title" content={`${post.title} | AI & Robotics Agency`} />
         <meta name="twitter:description" content={post.excerpt} />
         <meta name="twitter:image" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
+        <meta name="twitter:image:src" content={`https://www.beeai.world/images/blog/${post.id}.jpg`} />
+        <meta name="twitter:image:alt" content={post.title} />
+        <meta name="twitter:domain" content="beeai.world" />
+        
+        {/* Force immediate crawling */}
+        <meta name="robots" content="index, follow" />
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="expires" content="0" />
+        <meta http-equiv="pragma" content="no-cache" />
         
         {/* Canonical URL */}
         <link rel="canonical" href={window.location.href.split('?')[0]} />
