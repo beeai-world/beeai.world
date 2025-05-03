@@ -429,9 +429,11 @@ const BlogPost = () => {
         tweetText = `🤖 Discover the future of hospitality with AI & Robotics!\n\n${post.title} | AI & Robotics Agency`;
     }
     
-    const baseUrl = `https://www.beeai.world/blog/${post.id}`;
+    // Force a unique URL every time to break the Twitter cache
+    const timestamp = new Date().getTime();
+    const baseUrl = `https://www.beeai.world/blog/${post.id}?ts=${timestamp}`;
     
-    // Create Twitter share URL with clean URL
+    // Create Twitter share URL with cachebuster
     const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(baseUrl)}`;
     
     window.open(twitterShareUrl, '_blank');
@@ -484,7 +486,9 @@ const BlogPost = () => {
         <meta property="og:type" content="article" />
         <meta property="og:title" content={post?.title ? `${post.title} | AI & Robotics Agency` : 'Blog | AI & Robotics Agency'} />
         <meta property="og:description" content={post?.excerpt || 'Discover the future of hospitality with AI & Robotics Agency'} />
-        <meta property="og:image" content={post?.image ? `https://www.beeai.world${post.image}` : 'https://www.beeai.world/images/og-image.png'} />
+        
+        {/* Fix image path: Ensure we have a complete, direct URL to the image file */}
+        <meta property="og:image" content={`https://www.beeai.world/images/blog/${post?.id || 1}.jpg`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content={post?.title || 'AI & Robotics Agency'} />
@@ -496,8 +500,13 @@ const BlogPost = () => {
         <meta name="twitter:creator" content="@BahadirCiloglu" />
         <meta name="twitter:title" content={post?.title ? `${post.title} | AI & Robotics Agency` : 'Blog | AI & Robotics Agency'} />
         <meta name="twitter:description" content={post?.excerpt || 'Discover the future of hospitality with AI & Robotics Agency'} />
-        <meta name="twitter:image" content={post?.image ? `https://www.beeai.world${post.image}` : 'https://www.beeai.world/images/og-image.png'} />
+        
+        {/* Also fix image path for Twitter */}
+        <meta name="twitter:image" content={`https://www.beeai.world/images/blog/${post?.id || 1}.jpg`} />
         <meta name="twitter:image:alt" content={post?.title || 'AI & Robotics Agency'} />
+        
+        {/* Force cache refresh on Twitter */}
+        <meta name="twitter:cache-timestamp" content={new Date().toISOString()} />
         
         {/* Canonical URL */}
         <link rel="canonical" href={`https://www.beeai.world/blog/${id}`} />
